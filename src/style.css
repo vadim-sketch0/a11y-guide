@@ -1,0 +1,142 @@
+/* src/style.css – точка входу стилів проєкту «Доступний веб» */
+@import "tailwindcss";
+
+/* Темна тема вмикається класом .dark на <html> (його ставить скрипт за пріоритетом: вибір → система → світла) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Шрифти: власні WOFF2-підмножини (кирилиця, латиниця), font-display: swap ---------- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-cyrillic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Merriweather";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/merriweather-cyrillic-700-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Merriweather";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/merriweather-latin-700-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@theme {
+  /* ---------- Примітиви палітри (OKLCH, тон 262°) ---------- */
+  --color-brand-50: oklch(0.97 0.02 262);
+  --color-brand-100: oklch(0.93 0.04 262);
+  --color-brand-300: oklch(0.8 0.1 262);
+  --color-brand-400: oklch(0.72 0.13 262);
+  --color-brand-600: oklch(0.5 0.19 262);
+  --color-brand-700: oklch(0.44 0.18 262);
+  --color-brand-900: oklch(0.3 0.1 262);
+  --color-brand-950: oklch(0.22 0.06 262);
+
+  /* ---------- Семантичні токени (світла тема – за замовчуванням) ---------- */
+  --color-surface: var(--color-white);
+  --color-elevated: var(--color-slate-50);
+  --color-sunken: var(--color-slate-100);
+  --color-on-surface: var(--color-slate-900);
+  --color-muted: var(--color-slate-600);
+  --color-line: var(--color-slate-300);
+  --color-line-strong: var(--color-slate-500); /* межі полів: ≥ 3 : 1 (WCAG 1.4.11) */
+  --color-accent: var(--color-brand-600);
+  --color-accent-strong: var(--color-brand-700);
+  --color-on-accent: var(--color-white);
+  --color-accent-soft: var(--color-brand-50);
+  --color-on-accent-soft: var(--color-brand-700);
+  --color-danger: var(--color-red-700);
+  --color-success: var(--color-emerald-700);
+  --color-success-soft: var(--color-emerald-50);
+  --color-focus: var(--color-brand-700); /* ≥ 3 : 1 до білого тла (WCAG 1.4.11) */
+
+  /* ---------- Типографіка: два сімейства й плинна шкала ---------- */
+  --font-display: "Merriweather", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --text-fluid-hero: clamp(2.25rem, 1.6rem + 3.2vw, 4.25rem);
+  --text-fluid-hero--line-height: 1.1;
+  --text-fluid-h2: clamp(1.6rem, 1.3rem + 1.4vw, 2.5rem);
+  --text-fluid-h2--line-height: 1.2;
+
+  /* ---------- Відступи, радіуси, тіні, рух ---------- */
+  --spacing-section: clamp(3.5rem, 2.5rem + 4vw, 7rem);
+  --radius-card: 0.875rem;
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.06), 0 8px 24px oklch(0 0 0 / 0.08);
+  --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.08), 0 18px 36px oklch(0 0 0 / 0.14);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  --animate-fade-up: fade-up 480ms var(--ease-snappy) both;
+  --breakpoint-3xl: 112rem;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  /* Темна тема: перевизначаються лише семантичні токени – компоненти не знають про тему */
+  .dark {
+    --color-surface: var(--color-slate-950);
+    --color-elevated: var(--color-slate-900);
+    --color-sunken: oklch(0.24 0.03 262);
+    --color-on-surface: var(--color-slate-100);
+    --color-muted: var(--color-slate-300);
+    --color-line: var(--color-slate-700);
+    --color-line-strong: var(--color-slate-400);
+    --color-accent: var(--color-brand-400);
+    --color-accent-strong: var(--color-brand-300);
+    --color-on-accent: var(--color-slate-950);
+    --color-accent-soft: var(--color-brand-950);
+    --color-on-accent-soft: var(--color-brand-100);
+    --color-danger: var(--color-red-300);
+    --color-success: var(--color-emerald-300);
+    --color-success-soft: oklch(0.26 0.05 165);
+    --color-focus: var(--color-amber-300);
+    color-scheme: dark;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background: var(--color-surface);
+    color: var(--color-on-surface);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}

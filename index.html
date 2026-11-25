@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Доступний веб — практичний посібник з вебдоступності</title>
+    <meta
+      name="description"
+      content="Практичний посібник з вебдоступності українською: принципи POUR, ключові критерії WCAG 2.2, способи перевірки та відповіді на часті запитання."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#2a4fc4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/merriweather-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      // Тема до першого відмальовування: явний вибір → системна перевага → світла за замовчуванням
+      try {
+        const t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches))
+          document.documentElement.classList.add("dark");
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="bg-surface font-sans text-on-surface antialiased">
+    <a
+      href="#main"
+      class="sr-only z-50 rounded-lg bg-accent px-4 py-3 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >Перейти до основного вмісту</a
+    >
+
+    <!-- 1. Шапка -->
+    <header class="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur print:static print:border-0">
+      <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:gap-3 sm:px-6 lg:px-8">
+        <a
+          href="#top"
+          class="flex min-h-11 min-w-0 items-center gap-2 rounded-lg font-display text-base font-bold text-on-surface sm:text-lg"
+        >
+          <svg class="size-8 shrink-0" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="8" class="fill-accent" />
+            <circle cx="16" cy="8.5" r="2.6" class="fill-on-accent" />
+            <path
+              d="M8 12.5h16M16 12.5v6.5M16 19l-4 7M16 19l4 7"
+              class="stroke-on-accent"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+          Доступний веб
+        </a>
+        <nav aria-label="Головна навігація" class="ml-auto hidden lg:block print:hidden">
+          <ul class="flex items-center gap-1">
+            <li>
+              <a href="#principles" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                >Принципи</a
+              >
+            </li>
+            <li>
+              <a href="#why" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                >Чому це важливо</a
+              >
+            </li>
+            <li>
+              <a href="#criteria" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                >Критерії</a
+              >
+            </li>
+            <li>
+              <a href="#faq" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                >Запитання</a
+              >
+            </li>
+            <li>
+              <a href="#consult" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                >Консультація</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <button
+          id="theme-toggle"
+          type="button"
+          class="ml-auto inline-flex size-11 shrink-0 items-center justify-center rounded-lg border border-line text-on-surface transition-colors hover:bg-sunken lg:ml-0 print:hidden"
+        >
+          <svg
+            class="size-5 dark:hidden"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+          </svg>
+          <svg
+            class="hidden size-5 dark:block"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+            />
+          </svg>
+          <span class="sr-only" id="theme-label">Тема: системна. Перемкнути</span>
+        </button>
+        <details class="group relative lg:hidden print:hidden">
+          <summary
+            class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg border border-line hover:bg-sunken [&::-webkit-details-marker]:hidden"
+          >
+            <span class="sr-only">Головне меню</span>
+            <svg
+              class="size-6 group-open:hidden"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            <svg
+              class="hidden size-6 group-open:block"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </summary>
+          <nav
+            aria-label="Мобільна навігація"
+            class="absolute right-0 mt-2 w-64 rounded-card border border-line bg-elevated p-2 shadow-lift"
+          >
+            <ul class="grid gap-1">
+              <li>
+                <a href="#principles" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                  >Принципи</a
+                >
+              </li>
+              <li>
+                <a href="#why" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                  >Чому це важливо</a
+                >
+              </li>
+              <li>
+                <a href="#criteria" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                  >Критерії</a
+                >
+              </li>
+              <li>
+                <a href="#faq" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                  >Запитання</a
+                >
+              </li>
+              <li>
+                <a href="#consult" class="flex min-h-11 items-center rounded-lg px-3 font-medium hover:bg-sunken"
+                  >Консультація</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1" class="outline-none">
+      <!-- 2. Головний екран -->
+      <section
+        id="top"
+        aria-labelledby="hero-title"
+        class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20"
+      >
+        <div class="animate-fade-up motion-reduce:animate-none">
+          <p class="mb-3 inline-flex rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-on-accent-soft">
+            WCAG 2.2 · рівень AA
+          </p>
+          <h1 id="hero-title" class="font-display text-fluid-hero font-bold tracking-tight text-balance">
+            Вебдоступність без міфів
+          </h1>
+          <p class="mt-5 max-w-prose text-lg text-pretty text-muted">
+            Короткий практичний посібник для студентів і розробників: принципи POUR, ключові критерії WCAG 2.2 і способи
+            перевірити власний сайт за пів години.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#principles"
+              class="inline-flex min-h-12 items-center justify-center rounded-lg bg-accent px-6 font-semibold text-on-accent transition duration-200 ease-snappy hover:bg-accent-strong active:scale-[0.98] motion-reduce:transition-none"
+              >Почати з основ</a
+            >
+            <a
+              href="#consult"
+              class="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-accent px-6 font-semibold text-accent transition duration-200 ease-snappy hover:bg-accent-soft active:scale-[0.98] motion-reduce:transition-none"
+              >Запитати консультацію</a
+            >
+          </div>
+        </div>
+        <picture>
+          <source
+            type="image/avif"
+            srcset="
+              /img/hero-480.avif   480w,
+              /img/hero-800.avif   800w,
+              /img/hero-1200.avif 1200w,
+              /img/hero-1600.avif 1600w
+            "
+            sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+          />
+          <source
+            type="image/webp"
+            srcset="
+              /img/hero-480.webp   480w,
+              /img/hero-800.webp   800w,
+              /img/hero-1200.webp 1200w,
+              /img/hero-1600.webp 1600w
+            "
+            sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+          />
+          <img
+            src="/img/hero-800.jpg"
+            srcset="/img/hero-480.jpg 480w, /img/hero-800.jpg 800w, /img/hero-1200.jpg 1200w, /img/hero-1600.jpg 1600w"
+            sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+            width="1600"
+            height="1200"
+            fetchpriority="high"
+            alt="Ілюстрація: ноутбук із вебсторінкою, на кнопці – помітна рамка фокуса, поруч символ доступності й клавіша Tab на клавіатурі"
+            class="w-full rounded-card shadow-card"
+          />
+        </picture>
+      </section>
+
+      <!-- 3. Принципи -->
+      <section id="principles" aria-labelledby="principles-title" class="bg-elevated py-section">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 id="principles-title" class="font-display text-fluid-h2 font-bold">Чотири принципи й дві звички</h2>
+          <p class="mt-3 max-w-prose text-muted">
+            Усі критерії WCAG згруповано за принципами POUR. Ще дві звички розробника закривають більшість типових
+            помилок.
+          </p>
+          <ul class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(min(20rem,100%),1fr))] gap-5">
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Сприйнятність</h3>
+              <p class="mt-2 text-muted">
+                Інформацію можна сприйняти різними чуттями: текстові альтернативи, субтитри, достатній контраст.
+              </p>
+            </li>
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <rect x="2" y="6" width="20" height="12" rx="2" />
+                <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Керованість</h3>
+              <p class="mt-2 text-muted">Усе працює з клавіатури, фокус видно, а користувачу вистачає часу на дії.</p>
+            </li>
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Зрозумілість</h3>
+              <p class="mt-2 text-muted">
+                Мову сторінки вказано, навігація передбачувана, помилки у формах пояснено словами.
+              </p>
+            </li>
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Надійність</h3>
+              <p class="mt-2 text-muted">
+                Розмітка коректна, тож браузери й допоміжні технології однаково розуміють назви, ролі й стани.
+              </p>
+            </li>
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Семантика понад усе</h3>
+              <p class="mt-2 text-muted">
+                Справжні button, nav, label і заголовки дають доступність «безкоштовно» – ARIA потрібна лише там, де
+                HTML не вистачає.
+              </p>
+            </li>
+            <li
+              class="group rounded-card border border-line bg-surface p-6 shadow-card transition duration-300 ease-snappy hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <svg
+                class="size-10 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+              </svg>
+              <h3 class="mt-4 text-xl font-semibold">Перевіряти вручну</h3>
+              <p class="mt-2 text-muted">
+                Автоматичні засоби знаходять лише частину проблем; прохід клавішею Tab і зчитувач екрана обов’язкові.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 4. Детальний розділ -->
+      <section id="why" aria-labelledby="why-title" class="py-section">
+        <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <div>
+            <h2 id="why-title" class="font-display text-fluid-h2 font-bold">Чому це важливо</h2>
+            <div class="mt-5 grid max-w-prose gap-4 text-pretty text-muted">
+              <p>
+                За оцінкою Всесвітньої організації охорони здоров’я, приблизно 1,3 мільярда людей – кожен шостий – мають
+                значні порушення здоров’я. Але доступність потрібна не лише їм: людині з травмованою рукою,
+                користувачеві на яскравому сонці, літній людині з дрібним шрифтом.
+              </p>
+              <p>
+                Найпоширеніші проблеми прості: низький контраст тексту, зображення без альтернативного тексту, поля форм
+                без підписів, порожні посилання й кнопки. Більшість із них виправляють за кілька хвилин.
+              </p>
+            </div>
+            <!-- Компонент «порада» в широкому контексті (контейнерний запит) -->
+            <div class="@container mt-8">
+              <aside
+                aria-label="Порада"
+                class="flex flex-col gap-4 rounded-card border border-line bg-accent-soft p-5 @md:flex-row @md:items-center"
+              >
+                <svg
+                  class="size-12 shrink-0 text-accent"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z" />
+                </svg>
+                <p class="text-on-accent-soft">
+                  <strong class="block text-lg">Порада: почніть із клавіатури</strong>Відкладіть мишу й пройдіть
+                  сторінку клавішею Tab. Якщо фокус зник або елемент недосяжний – ви знайшли першу проблему.
+                </p>
+              </aside>
+            </div>
+          </div>
+          <picture>
+            <source
+              type="image/avif"
+              srcset="/img/contrast-480.avif 480w, /img/contrast-800.avif 800w, /img/contrast-1200.avif 1200w"
+              sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+            />
+            <source
+              type="image/webp"
+              srcset="/img/contrast-480.webp 480w, /img/contrast-800.webp 800w, /img/contrast-1200.webp 1200w"
+              sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+            />
+            <img
+              src="/img/contrast-800.jpg"
+              srcset="/img/contrast-480.jpg 480w, /img/contrast-800.jpg 800w, /img/contrast-1200.jpg 1200w"
+              sizes="(min-width: 80rem) 36rem, (min-width: 64rem) 45vw, 92vw"
+              width="1200"
+              height="900"
+              loading="lazy"
+              decoding="async"
+              alt="Порівняння двох карток із текстом: світло-сірий текст на білому має контраст 1,5 : 1, темний – 17,9 : 1"
+              class="w-full rounded-card shadow-card"
+            />
+          </picture>
+        </div>
+      </section>
+
+      <!-- 5. Таблиця -->
+      <section id="criteria" aria-labelledby="criteria-title" class="bg-elevated py-section">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 id="criteria-title" class="font-display text-fluid-h2 font-bold">Ключові критерії WCAG 2.2</h2>
+          <p class="mt-3 max-w-prose text-muted">
+            Тринадцять критеріїв, з яких варто почати перевірку. Таблицю можна прокручувати; шапка лишається видимою.
+          </p>
+          <div
+            class="mt-8 max-h-[28rem] overflow-auto rounded-card border border-line bg-surface"
+            tabindex="0"
+            role="region"
+            aria-labelledby="criteria-caption"
+          >
+            <table class="w-full min-w-[44rem] border-collapse text-left">
+              <caption id="criteria-caption" class="sr-only">
+                Ключові критерії успіху WCAG 2.2: номер, назва, рівень, суть і спосіб перевірки
+              </caption>
+              <thead class="sticky top-0 z-10 bg-sunken text-sm">
+                <tr>
+                  <th scope="col" class="px-4 py-3 font-semibold">Критерій</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Рівень</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Суть</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Як перевірити</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm *:border-t *:border-line *:odd:bg-surface *:even:bg-elevated">
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">1.1.1 Нетекстовий вміст</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Альтернативний текст для зображень і піктограм</td>
+                  <td class="px-4 py-3">Переглянути alt, запустити axe</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">1.3.1 Інформація і зв’язки</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Заголовки, списки, таблиці й підписи передано розміткою</td>
+                  <td class="px-4 py-3">Дерево доступності в DevTools</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">1.4.3 Контраст (мінімум)</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">4,5 : 1 для тексту, 3 : 1 для великого</td>
+                  <td class="px-4 py-3">Вимірювач контрасту в DevTools</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">1.4.10 Перекомпонування</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">Без горизонтальної прокрутки на ширині 320 CSS px</td>
+                  <td class="px-4 py-3">Масштаб 400 % при вікні 1280 px</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">1.4.11 Контраст нетекстових елементів</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">3 : 1 для меж полів, піктограм, індикатора фокуса</td>
+                  <td class="px-4 py-3">Вимірювач контрасту</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">2.1.1 Клавіатура</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Уся функціональність доступна з клавіатури</td>
+                  <td class="px-4 py-3">Прохід Tab / Shift+Tab, Enter, пробіл</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">2.4.3 Порядок фокуса</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Фокус рухається в логічному порядку</td>
+                  <td class="px-4 py-3">Прохід Tab</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">2.4.7 Видимий фокус</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">Елемент у фокусі помітно виділено</td>
+                  <td class="px-4 py-3">Прохід Tab</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">2.4.11 Фокус не закритий (мінімум)</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">Липка шапка чи банер не ховає елемент у фокусі</td>
+                  <td class="px-4 py-3">Прохід Tab із прокруткою</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">2.5.8 Розмір цілі (мінімум)</th>
+                  <td class="px-4 py-3">AA</td>
+                  <td class="px-4 py-3">Ціль щонайменше 24 × 24 CSS px або достатній відступ</td>
+                  <td class="px-4 py-3">Виміряти елементи керування</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">3.3.1 Ідентифікація помилок</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Помилку у формі описано текстом</td>
+                  <td class="px-4 py-3">Надіслати форму з помилками</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">3.3.2 Підписи або інструкції</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Кожне поле має підпис, формат пояснено</td>
+                  <td class="px-4 py-3">Переглянути форму</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-4 py-3 font-semibold">4.1.2 Назва, роль, значення</th>
+                  <td class="px-4 py-3">A</td>
+                  <td class="px-4 py-3">Елементи керування мають доступні назви й стани</td>
+                  <td class="px-4 py-3">axe, дерево доступності</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Часті запитання -->
+      <section id="faq" aria-labelledby="faq-title" class="py-section">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <h2 id="faq-title" class="font-display text-fluid-h2 font-bold">Часті запитання</h2>
+          <div class="mt-8 divide-y divide-line rounded-card border border-line">
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Чи достатньо оверлей-віджета «доступності»?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Ні. Віджети змінюють вигляд, але не виправляють розмітку: порожні кнопки, відсутні підписи й
+                неправильний порядок фокуса лишаються. Часто вони навіть додають зайві кроки для клавіатури.
+              </p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Який рівень WCAG вимагають на практиці?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Зазвичай рівень AA: на нього посилаються європейський стандарт EN 301 549 і більшість законодавчих
+                вимог. Рівень AAA цілком для всіх сторінок не вимагають.
+              </p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Чи достатньо 100 балів Lighthouse?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Ні. Автоматичні перевірки знаходять лише частину порушень. Видимість фокуса, зміст альтернативного
+                тексту, логіку заголовків і зрозумілість помилок перевіряє людина.
+              </p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Коли потрібна ARIA?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Коли потрібного елемента немає в HTML: вкладки, комбобокси, живі регіони. Перше правило ARIA – не
+                використовувати її, якщо є рідний елемент із потрібною семантикою.
+              </p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Що змінилося у WCAG 2.2?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Додано дев’ять критеріїв, зокрема «Фокус не закритий», «Розмір цілі (мінімум)» і «Доступна
+                автентифікація»; критерій 4.1.1 «Синтаксичний аналіз» вилучено.
+              </p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 font-semibold [&::-webkit-details-marker]:hidden"
+              >
+                Чи потрібна окрема «версія для людей з інвалідністю»?<span
+                  aria-hidden="true"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-accent-soft text-on-accent-soft transition-transform duration-200 ease-snappy group-open:rotate-45 motion-reduce:transition-none"
+                  >+</span
+                >
+              </summary>
+              <p class="px-5 pb-5 text-muted">
+                Ні. Окремі версії швидко застарівають. Доступним має бути основний сайт – це дешевше й чесніше щодо
+                користувачів.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Форма -->
+      <section id="consult" aria-labelledby="consult-title" class="bg-elevated py-section">
+        <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:px-8">
+          <div>
+            <h2 id="consult-title" class="font-display text-fluid-h2 font-bold">Запит на консультацію</h2>
+            <p class="mt-3 max-w-prose text-muted">
+              Опишіть свій сайт – підкажемо, з чого почати перевірку. Поля з позначкою * обов’язкові.
+            </p>
+            <p class="mt-2 max-w-prose text-sm text-muted">
+              Це навчальний проєкт: форма перевіряє введення, але дані нікуди не надсилаються.
+            </p>
+            <div
+              id="form-summary"
+              class="mt-6 hidden rounded-card border-2 border-danger bg-surface p-4"
+              role="alert"
+              tabindex="-1"
+            >
+              <p class="font-semibold text-danger">Перевірте поля:</p>
+              <ul id="form-summary-list" class="mt-2 list-disc pl-5"></ul>
+            </div>
+            <div
+              id="form-success"
+              class="mt-6 hidden rounded-card border-2 border-success bg-success-soft p-4"
+              role="status"
+              tabindex="-1"
+            >
+              <p class="font-semibold text-success">Дякуємо! Запит сформовано.</p>
+              <p class="mt-1">У справжньому сервісі ми відповіли б на вказану адресу протягом двох робочих днів.</p>
+            </div>
+            <form id="consult-form" class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2" novalidate>
+              <div class="grid content-start gap-1.5">
+                <label for="name" class="font-medium">Ім’я *</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  minlength="2"
+                  autocomplete="name"
+                  aria-describedby="name-err"
+                  class="peer min-h-12 rounded-lg border-2 border-line-strong bg-surface px-3 user-invalid:border-danger"
+                />
+                <p id="name-err" class="hidden text-sm font-medium text-danger peer-user-invalid:block">
+                  Вкажіть ім’я – щонайменше 2 символи.
+                </p>
+              </div>
+              <div class="grid content-start gap-1.5">
+                <label for="email" class="font-medium">Електронна пошта *</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  aria-describedby="email-hint email-err"
+                  class="peer min-h-12 rounded-lg border-2 border-line-strong bg-surface px-3 user-invalid:border-danger"
+                />
+                <p id="email-hint" class="text-sm text-muted peer-user-invalid:hidden">Наприклад: name@example.com</p>
+                <p id="email-err" class="hidden text-sm font-medium text-danger peer-user-invalid:block">
+                  Введіть адресу у форматі name@example.com.
+                </p>
+              </div>
+              <div class="grid content-start gap-1.5">
+                <label for="org" class="font-medium">Організація</label>
+                <input
+                  id="org"
+                  name="org"
+                  type="text"
+                  autocomplete="organization"
+                  class="min-h-12 rounded-lg border-2 border-line-strong bg-surface px-3"
+                />
+              </div>
+              <div class="grid content-start gap-1.5">
+                <label for="site" class="font-medium">Адреса сайту *</label>
+                <input
+                  id="site"
+                  name="site"
+                  type="url"
+                  required
+                  autocomplete="url"
+                  placeholder="https://"
+                  aria-describedby="site-err"
+                  class="peer min-h-12 rounded-lg border-2 border-line-strong bg-surface px-3 user-invalid:border-danger"
+                />
+                <p id="site-err" class="hidden text-sm font-medium text-danger peer-user-invalid:block">
+                  Введіть повну адресу, що починається з https://.
+                </p>
+              </div>
+              <div class="grid content-start gap-1.5">
+                <label for="kind" class="font-medium">Тип ресурсу *</label>
+                <select
+                  id="kind"
+                  name="kind"
+                  required
+                  aria-describedby="kind-err"
+                  class="peer min-h-12 w-full min-w-0 rounded-lg border-2 border-line-strong bg-surface px-3 user-invalid:border-danger"
+                >
+                  <option value="">Оберіть…</option>
+                  <option>Сайт закладу освіти</option>
+                  <option>Інтернет-магазин</option>
+                  <option>Державний сервіс</option>
+                  <option>Особистий або студентський проєкт</option>
+                </select>
+                <p id="kind-err" class="hidden text-sm font-medium text-danger peer-user-invalid:block">
+                  Оберіть тип ресурсу.
+                </p>
+              </div>
+              <fieldset class="grid min-w-0 content-start gap-2">
+                <legend class="mb-1.5 font-medium">Цільовий рівень *</legend>
+                <label
+                  class="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border-2 border-line-strong bg-surface px-3 has-checked:border-accent has-checked:bg-accent-soft"
+                  ><input type="radio" name="level" value="A" required class="size-4 accent-accent" /> A –
+                  мінімальний</label
+                >
+                <label
+                  class="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border-2 border-line-strong bg-surface px-3 has-checked:border-accent has-checked:bg-accent-soft"
+                  ><input type="radio" name="level" value="AA" class="size-4 accent-accent" /> AA –
+                  рекомендований</label
+                >
+              </fieldset>
+              <div class="grid gap-1.5 sm:col-span-2">
+                <label for="message" class="font-medium">Що вас турбує? *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  minlength="20"
+                  rows="4"
+                  aria-describedby="message-hint message-err"
+                  class="peer rounded-lg border-2 border-line-strong bg-surface px-3 py-2 user-invalid:border-danger"
+                ></textarea>
+                <p id="message-hint" class="text-sm text-muted peer-user-invalid:hidden">Щонайменше 20 символів.</p>
+                <p id="message-err" class="hidden text-sm font-medium text-danger peer-user-invalid:block">
+                  Опишіть проблему трохи докладніше – щонайменше 20 символів.
+                </p>
+              </div>
+              <div class="grid gap-1.5 sm:col-span-2">
+                <label class="flex min-h-11 cursor-pointer items-start gap-3"
+                  ><input
+                    id="consent"
+                    name="consent"
+                    type="checkbox"
+                    required
+                    class="peer mt-1 size-5 shrink-0 accent-accent"
+                  />
+                  <span>Погоджуюся, що відповідь надійде на вказану адресу *</span></label
+                >
+              </div>
+              <div class="sm:col-span-2">
+                <button
+                  type="submit"
+                  class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-accent px-6 font-semibold text-on-accent transition duration-200 ease-snappy hover:bg-accent-strong active:scale-[0.98] motion-reduce:transition-none sm:w-auto"
+                >
+                  Надіслати запит
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- Той самий компонент «порада» у вузькій бічній колонці -->
+          <div class="@container self-start print:hidden">
+            <aside
+              aria-label="Порада щодо форм"
+              class="flex flex-col gap-4 rounded-card border border-line bg-accent-soft p-5 @md:flex-row @md:items-center"
+            >
+              <svg
+                class="size-12 shrink-0 text-accent"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z" />
+              </svg>
+              <p class="text-on-accent-soft">
+                <strong class="block text-lg">Порада: помилки словами</strong>Червона рамка непомітна людям із
+                дальтонізмом. Пояснюйте помилку текстом біля поля й пов’язуйте його через aria-describedby.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 8. Підвал -->
+    <footer class="border-t border-line bg-surface">
+      <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+        <div>
+          <p class="font-display text-lg font-bold">Доступний веб</p>
+          <p class="mt-2 text-sm text-muted">Навчальний проєкт з дисципліни «Веб-програмування».</p>
+        </div>
+        <nav aria-label="Розділи сторінки">
+          <h2 class="font-semibold">Розділи</h2>
+          <ul class="mt-3 grid gap-1 text-sm">
+            <li>
+              <a href="#principles" class="inline-flex min-h-6 items-center underline-offset-4 hover:underline"
+                >Принципи POUR</a
+              >
+            </li>
+            <li>
+              <a href="#criteria" class="inline-flex min-h-6 items-center underline-offset-4 hover:underline"
+                >Ключові критерії</a
+              >
+            </li>
+            <li>
+              <a href="#faq" class="inline-flex min-h-6 items-center underline-offset-4 hover:underline"
+                >Часті запитання</a
+              >
+            </li>
+            <li>
+              <a href="#consult" class="inline-flex min-h-6 items-center underline-offset-4 hover:underline"
+                >Консультація</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <nav aria-label="Зовнішні ресурси">
+          <h2 class="font-semibold">Джерела</h2>
+          <ul class="mt-3 grid gap-1 text-sm">
+            <li>
+              <a
+                href="https://www.w3.org/TR/WCAG22/"
+                class="inline-flex min-h-6 items-center underline underline-offset-4 print:after:content-['_('_attr(href)_')']"
+                >WCAG 2.2 (W3C)</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.w3.org/WAI/ARIA/apg/"
+                class="inline-flex min-h-6 items-center underline underline-offset-4 print:after:content-['_('_attr(href)_')']"
+                >ARIA Authoring Practices Guide</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://developer.mozilla.org/uk/docs/Web/Accessibility"
+                class="inline-flex min-h-6 items-center underline underline-offset-4 print:after:content-['_('_attr(href)_')']"
+                >MDN: Доступність</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/dequelabs/axe-core"
+                class="inline-flex min-h-6 items-center underline underline-offset-4 print:after:content-['_('_attr(href)_')']"
+                >axe-core на GitHub</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div>
+          <h2 class="font-semibold">Контакти</h2>
+          <address class="mt-3 text-sm not-italic">
+            Студентський проєкт, група КІІ 61б<br />
+            МЕГУ ім. Степана Дем’янчука<br />
+            вул. Степана Дем’янчука, 4, Рівне<br />
+            <a
+              href="https://github.com/vadim-sketch0/a11y-guide"
+              class="inline-flex min-h-6 items-center underline underline-offset-4"
+              >Репозиторій на GitHub</a
+            >
+          </address>
+        </div>
+      </div>
+      <p class="border-t border-line py-5 text-center text-sm text-muted">© 2026 Вадим Якимчук. Текст – CC BY 4.0.</p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
